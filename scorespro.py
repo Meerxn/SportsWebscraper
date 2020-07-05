@@ -5,6 +5,7 @@ from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 import requests
 import pprint, requests, sys, os, re
+from datetime import datetime, date
 
 # Use this as url for cli but going to hardcode it for now
 url = 'https://www.scorespro.com/'
@@ -25,6 +26,7 @@ def find_data(url):
     # gets all the comp groups 
     comp_groups = main_feed.find_all('div', class_='compgrp')
     # Find Leauge Data in compgroups
+    main_sports = []
     for leauge in comp_groups:
         
         leauge_name = ''
@@ -38,7 +40,7 @@ def find_data(url):
         for match in matches_in_leauges:
             # KickOff Timings
             match_kick = str(match.find(lambda tag: tag.name=='td', class_ ="kick"))
-            match_kick_str = re.sub('^<.$>','', (match_kick))
+            match_kick_str = re.sub('^<.$>',"", (match_kick))
             # Find the status 
             status_td = match.find(lambda tag: tag.name=='td', class_ ="status")
             status = status_td.find(lambda tag: tag.name == 'span')
@@ -71,11 +73,14 @@ def find_data(url):
             else:
                 score = score.text
 
-            print(f"{home} {score} {away}")
+            today = date.today()
+            print(today)
+            main_sports.append([leauge_name, home, score, away, match_kick_str])
 
+    return main_sports
 
 
     
 
-find_data(url)
+print(find_data(url))
 
