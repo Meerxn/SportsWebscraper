@@ -1,5 +1,4 @@
 import sports 
-import csv
 import time
 import pprint
 
@@ -19,5 +18,30 @@ def get_matches():
     
     return clean_dict(filtered_sports)
     
-pp = pprint.PrettyPrinter(depth=6)
-pp.pprint(get_matches())
+def convert_db(dictionary):
+    valid_sports = {
+        'cricket':'CRICKET',
+        'rugby-league':'RUGBY_L',
+        'rugby-union':'RUGBY_U',
+        'hockey':'HOCKEY',
+        'baseball':'BASEBALL',
+        'basketball':'BASKETBALL',
+        'football':'FOOTBALL',
+        'handball':'HANDBALL',
+        'soccer':'SOCCER',
+        'tennis':'TENNIS',
+        'volleyball':'VOLLEYBALL'
+    }
+    for keys,values in dictionary.items():
+        for teams in values:
+            try:
+                match_information = sports.get_match(valid_sports[keys],teams[0], teams[1])
+                print(match_information.match_date)
+            except Exception as e:
+                print(e)
+
+
+# pp = pprint.PrettyPrinter(depth=6)
+# print(get_matches().keys())
+
+convert_db(get_matches())
